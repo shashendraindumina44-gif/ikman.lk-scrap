@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ikman Scraper | BY LORD INDUMINA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .footer-brand { letter-spacing: 2px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen font-sans">
+
+    <div class="container mx-auto py-10 px-4">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-extrabold text-green-700 mb-2">Ikman Searcher 🚀</h1>
+            <p class="text-gray-600 font-medium">Find anything from ikman.lk instantly</p>
+            <div class="mt-4 inline-block bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full font-bold uppercase footer-brand">
+                Developed by Lord Indumina
+            </div>
+        </header>
+        
+        <!-- Search Bar -->
+        <div class="flex max-w-2xl mx-auto mb-12 shadow-2xl rounded-2xl overflow-hidden">
+            <input type="text" id="keyword" placeholder="What are you looking for? (e.g. iPhone 15, Vitz)" 
+                class="w-full p-5 border-none focus:outline-none text-lg">
+            <button onclick="search()" class="bg-green-600 text-white px-8 py-5 font-bold hover:bg-green-700 transition-all flex items-center gap-2">
+                <i class="fas fa-search"></i> SEARCH
+            </button>
+        </div>
+
+        <!-- API Endpoint Info (Visible for Developers) -->
+        <div class="max-w-2xl mx-auto mb-8 bg-gray-800 text-green-400 p-3 rounded-lg text-xs font-mono shadow-inner">
+            <span class="text-white font-bold">API ENDPOINT:</span> /api/search?q=<span class="italic text-yellow-400">{item_name}</span>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="hidden text-center py-10">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-green-600"></div>
+            <p class="mt-4 text-green-700 font-bold">Searching Ikman database...</p>
+        </div>
+
+        <!-- Results Grid -->
+        <div id="results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+    </div>
+
+    <footer class="text-center py-10 text-gray-400 text-sm">
+        <p>© 2026 | ALL RIGHTS RESERVED | <span class="font-bold text-gray-600">BY LORD INDUMINA</span></p>
+    </footer>
+
+    <script>
+        async function search() {
+            const keyword = document.getElementById('keyword').value;
+            const resultsDiv = document.getElementById('results');
+            const loading = document.getElementById('loading');
+
+            if (!keyword) return alert("Type something machan!");
+
+            resultsDiv.innerHTML = "";
+            loading.classList.remove('hidden');
+
+            try {
+                // Connect to our serverless API
+                const response = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`);
+                const result = await response.json();
+                
+                loading.classList.add('hidden');
+
+                if (!result.success || result.data.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="col-span-full text-center py-10">
+                            <i class="fas fa-search-minus text-5xl text-gray-300 mb-4"></i>
+                            <p class="text-xl text-gray-500">No items found for "${keyword}"! 😢</p>
+                        </div>`;
+                    return;
+                }
+
+                result.data.forEach(item => {
+                    resultsDiv.innerHTML += `
+                        <div class="glass-card rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 overflow-hidden">
+                            <div class="relative">
+                                <img src="${item.image}" class="w-full h-52 object-cover" alt="item">
+                                <div class="absolute top-2 right-2 bg-green-600 text-white px-3 py-1 rounded-lg font-bold text-sm shadow-md">
+                                    ${item.price}
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <h2 class="text-md font-bold text-gray-800 h-12 overflow-hidden mb-2">${item.title}</h2>
+                                <div class="flex items-center text-gray-500 text-xs mb-4">
+                                    <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+                                    <span>${item.info}</span>
+                                </div>
+                                <a href="${item.link}" target="_blank" class="block text-center bg-gray-100 hover:bg-green-600 hover:text-white text-green-700 font-bold py-2 rounded-xl transition-colors">
+                                    VIEW AD
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                loading.classList.add('hidden');
+                alert("Something went wrong with the API!");
+            }
+        }
+    </script>
+</body>
+</html>
