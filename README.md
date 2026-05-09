@@ -15,7 +15,6 @@
 
 ## 📜 THE SCROLL OF DESTINY (Overview)
 
-Meka nikanma scraper ekak nemei machan. Ikman.lk eke thiyena onaama item ekaka details (Price, Image, Location) **Instant** ganna puluwan supiri API ekak saha Anime style UI ekak. 
 
 > "I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!" – *Naruto Uzumaki*
 
@@ -23,7 +22,6 @@ Meka nikanma scraper ekak nemei machan. Ikman.lk eke thiyena onaama item ekaka d
 * ⚡ **Lightning Fast:** Uses Axios & Cheerio (No slow browser loading).
 * 📱 **Mobile Friendly:** UI eka onaama device ekakata set wenawa.
 * 🛠 **Developer API:** Build your own apps using my endpoint.
-* 🛡 **Bulletproof:** Vercel eke kawadawath block wenne na.
 
 ---
 
@@ -38,6 +36,4 @@ Meka nikanma scraper ekak nemei machan. Ikman.lk eke thiyena onaama item ekaka d
 
 ## ⛩️ SUMMONING (Installation)
 
-1. **Clone the Repo:**
-   ```bash
-   git clone [https://github.com/LORD-INDUMINA/ikman-scraper.git](https://github.com/LORD-INDUMINA/ikman-scraper.git)
+
