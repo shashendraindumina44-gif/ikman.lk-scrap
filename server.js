@@ -9,7 +9,7 @@ app.use(cors());
 app.get('/api/search', async (req, res) => {
     try {
         const query = req.query.q;
-        const outputType = req.query.type || 'json'; // type=text dammahama text eyi
+        const outputType = req.query.type || 'json';
 
         if (!query) return res.status(400).send("Target eka dapan machan! (?q=item)");
 
@@ -30,8 +30,16 @@ app.get('/api/search', async (req, res) => {
             const info = $(el).find('.description--2-ez3').text().trim();
             
             let image = $(el).find('img').attr('data-src') || $(el).find('img').attr('src');
-            if (image && image.startsWith('//')) image = 'https:' + image;
-            if (!image) image = 'https://ikman.lk/static/images/no-image.png';
+            
+            if (image) {
+                if (image.startsWith('//')) image = 'https:' + image;
+                
+                // IMAGE QUALITY FIX: Remove the thumbnail cropping and get original size
+                // Replacing /142/107/cropped.jpg with /620/465/original.jpg
+                image = image.replace(/\/\d+\/\d+\/cropped\.jpg$/, '/620/465/original.jpg');
+            } else {
+                image = 'https://ikman.lk/static/images/no-image.png';
+            }
 
             const rawLink = $(el).find('a').attr('href');
             const link = rawLink ? 'https://ikman.lk' + rawLink : 'N/A';
@@ -41,7 +49,6 @@ app.get('/api/search', async (req, res) => {
             }
         });
 
-        // 1. FRONTEND UI EKATA (JSON)
         if (outputType === 'json') {
             return res.json({
                 success: true,
@@ -51,18 +58,17 @@ app.get('/api/search', async (req, res) => {
             });
         }
 
-        // 2. TEXT OUTPUT (Oya illapu widiyata peli peli ena result eka)
-        let responseText = `Testing Ikman Scraper BY LORD INDUMINA...\n`;
+        let responseText = `--- Testing Ikman Scraper (HQ IMAGES) BY LORD INDUMINA ---\n`;
         responseText += `Found ${results.length} results.\n\n`;
 
         results.forEach((item, index) => {
             responseText += `--- Item ${index + 1} ---\n`;
             responseText += `Title : ${item.title}\n`;
             responseText += `Price : ${item.price}\n`;
+            responseText += `Image : ${item.image}\n`; // Link ekath damma image eka check karanna
             responseText += `Link  : ${item.link}\n\n`;
         });
 
-        // Content-Type eka text/plain dammahama thama browser eke peli peli penne
         res.setHeader('Content-Type', 'text/plain; charset=utf-8');
         return res.send(responseText);
 
