@@ -41,7 +41,7 @@ app.get('/api/search', async (req, res) => {
             }
         });
 
-        // 1. UI EKATA (JSON) - Meeka nisa UI eka wada karanawa
+        // 1. FRONTEND UI EKATA (JSON)
         if (outputType === 'json') {
             return res.json({
                 success: true,
@@ -51,27 +51,23 @@ app.get('/api/search', async (req, res) => {
             });
         }
 
-        // 2. TEXT OUTPUT (Pahadiliwa wenama thiyena list ekak)
-        let responseText = `--- TESTING IKMAN SCRAPER BY LORD INDUMINA ---\n`;
-        responseText += `Found ${results.length} results for: ${query}\n`;
-        responseText += `============================================\n`;
+        // 2. TEXT OUTPUT (Oya illapu widiyata peli peli ena result eka)
+        let responseText = `Testing Ikman Scraper BY LORD INDUMINA...\n`;
+        responseText += `Found ${results.length} results.\n\n`;
 
         results.forEach((item, index) => {
-            responseText += `\n[ ITEM ${index + 1} ]\n`;
-            responseText += `TITLE : ${item.title}\n`;
-            responseText += `PRICE : ${item.price}\n`;
-            responseText += `INFO  : ${item.info}\n`;
-            responseText += `IMAGE : ${item.image}\n`;
-            responseText += `LINK  : ${item.link}\n`;
-            responseText += `--------------------------------------------\n`;
+            responseText += `--- Item ${index + 1} ---\n`;
+            responseText += `Title : ${item.title}\n`;
+            responseText += `Price : ${item.price}\n`;
+            responseText += `Link  : ${item.link}\n\n`;
         });
 
-        // Browser ekata pahadiliwa text ekak bawa kiyamu
+        // Content-Type eka text/plain dammahama thama browser eke peli peli penne
         res.setHeader('Content-Type', 'text/plain; charset=utf-8');
         return res.send(responseText);
 
     } catch (error) {
-        res.status(500).send(`Critical System Failure: ${error.message}`);
+        res.status(500).send(`Critical Error: ${error.message}`);
     }
 });
 
